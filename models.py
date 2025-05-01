@@ -32,10 +32,10 @@ class Review(db.Model):
         return f"{self.user_name}: {self.review_date:%x}"
 
 class ImageData(db.Model):
-     id         = db.Column(db.Integer, primary_key=True)
-     file_name  = db.Column(db.String(120))
-     red        = db.Column(db.Integer)
-     green      = db.Column(db.Integer)
-     blue       = db.Column(db.Integer)
-     user       = db.Column(db.String(80))
-     timestamp  = db.Column(db.String(80))
+    id = db.Column(db.Integer, primary_key=True)
+    file_name = db.Column(db.String(120))
+    red = db.Column(db.Integer)
+    green = db.Column(db.Integer)
+    blue = db.Column(db.Integer)
+    user = db.Column(db.String(80))
+    timestamp = db.Column(db.String(80))
