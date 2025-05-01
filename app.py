@@ -5,6 +5,8 @@ from flask import Flask, redirect, render_template, request, send_from_directory
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
 from flask_wtf.csrf import CSRFProtect
+from models import Restaurant, Review, ImageData
+
 
 
 app = Flask(__name__, static_folder='static')
@@ -30,6 +32,10 @@ db = SQLAlchemy(app)
 
 # Enable Flask-Migrate commands "flask db init/migrate/upgrade" to work
 migrate = Migrate(app, db)
+
+@app.before_first_request
+def create_tables():
+    db.create_all()
 
 # The import must be done after db initialization due to circular import issue
 from models import Restaurant, Review
@@ -118,6 +124,37 @@ def utility_processor():
 def favicon():
     return send_from_directory(os.path.join(app.root_path, 'static'),
                                'favicon.ico', mimetype='image/vnd.microsoft.icon')
+
+@app.route('/api/images', methods=['POST'])
+@csrf.exempt
+def upload_image_data():
+    data = request.get_json()
+    img = ImageData(
+        file_name = data.get("fileName", ""),
+        red       = data.get("red", 0),
+        green     = data.get("green", 0),
+        blue      = data.get("blue", 0),
+        user      = data.get("user", "anon"),
+        timestamp = data.get("timestamp", "")
+    )
+    db.session.add(img)
+    db.session.commit()
+    return {"status": "ok"}, 201
+
+@app.route('/api/images', methods=['GET'])
+def get_image_data():
+    rows = ImageData.query.order_by(ImageData.timestamp.desc()).all()
+    result = []
+    for r in rows:
+        result.append({
+            "fileName": r.file_name,
+            "red": r.red,
+            "green": r.green,
+            "blue": r.blue,
+            "user": r.user,
+            "timestamp": r.timestamp
+        })
+    return jsonify(result)
 
 if __name__ == '__main__':
     app.run()
