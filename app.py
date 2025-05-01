@@ -124,35 +124,35 @@ def favicon():
                                'favicon.ico', mimetype='image/vnd.microsoft.icon')
 
 @app.route('/api/images', methods=['POST'])
- @csrf.exempt
- def upload_image_data():
-     data = request.get_json()
-     img = ImageData(
-         file_name = data.get("fileName", ""),
-         red       = data.get("red", 0),
-         green     = data.get("green", 0),
-         blue      = data.get("blue", 0),
-         user      = data.get("user", "anon"),
-         timestamp = data.get("timestamp", "")
-     )
-     db.session.add(img)
-     db.session.commit()
-     return {"status": "ok"}, 201
+@csrf.exempt
+def upload_image_data():
+    data = request.get_json()
+    img = ImageData(
+        file_name = data.get("fileName", ""),
+        red       = data.get("red", 0),
+        green     = data.get("green", 0),
+        blue      = data.get("blue", 0),
+        user      = data.get("user", "anon"),
+        timestamp = data.get("timestamp", "")
+    )
+    db.session.add(img)
+    db.session.commit()
+    return {"status": "ok"}, 201
  
- @app.route('/api/images', methods=['GET'])
- def get_image_data():
-     rows = ImageData.query.order_by(ImageData.timestamp.desc()).all()
-     result = []
-     for r in rows:
-         result.append({
-             "fileName": r.file_name,
-             "red": r.red,
-             "green": r.green,
-             "blue": r.blue,
-             "user": r.user,
-             "timestamp": r.timestamp
-         })
-     return jsonify(result)
+@app.route('/api/images', methods=['GET'])
+def get_image_data():
+    rows = ImageData.query.order_by(ImageData.timestamp.desc()).all()
+    result = []
+    for r in rows:
+        result.append({
+            "fileName": r.file_name,
+            "red": r.red,
+            "green": r.green,
+            "blue": r.blue,
+            "user": r.user,
+            "timestamp": r.timestamp
+        })
+    return jsonify(result)
 
 if __name__ == '__main__':
     app.run()
