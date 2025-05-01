@@ -4,8 +4,6 @@ from flask import Flask, redirect, render_template, request, send_from_directory
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
 from flask_wtf.csrf import CSRFProtect
-from models import Restaurant, Review, ImageData
-
 
 app = Flask(__name__, static_folder='static')
 csrf = CSRFProtect(app)
@@ -36,7 +34,7 @@ def create_tables():
     db.create_all()
 
 # The import must be done after db initialization due to circular import issue
-from models import Restaurant, Review
+from models import Restaurant, Review, ImageData
 
 @app.route('/', methods=['GET'])
 def index():
