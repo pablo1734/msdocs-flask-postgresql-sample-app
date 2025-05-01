@@ -29,10 +29,6 @@ db = SQLAlchemy(app)
 # Enable Flask-Migrate commands "flask db init/migrate/upgrade" to work
 migrate = Migrate(app, db)
 
-@app.before_first_request
-def create_tables():
-    db.create_all()
-
 # The import must be done after db initialization due to circular import issue
 from models import Restaurant, Review, ImageData
 
@@ -153,4 +149,6 @@ def get_image_data():
     return jsonify(result)
 
 if __name__ == '__main__':
+    with app.app_context():
+        db.create_all()
     app.run()
