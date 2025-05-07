@@ -117,7 +117,7 @@ def favicon():
     return send_from_directory(os.path.join(app.root_path, 'static'),
                                'favicon.ico', mimetype='image/vnd.microsoft.icon')
 
-@app.route('/api/images', methods=['POST'])
+@app.route('/api/imagenes', methods=['POST'])
 @csrf.exempt
 def upload_image_data():
     data = request.get_json()
@@ -133,7 +133,7 @@ def upload_image_data():
     db.session.commit()
     return {"status": "ok"}, 201
  
-@app.route('/api/images', methods=['GET'])
+@app.route('/api/imagenes', methods=['GET'])
 def get_image_data():
     rows = ImageData.query.order_by(ImageData.timestamp.desc()).all()
     result = []
@@ -147,6 +147,11 @@ def get_image_data():
             "timestamp": r.timestamp
         })
     return jsonify(result)
+
+@app.route('/imagenes')
+def imagenes():
+    rows = ImageData.query.order_by(ImageData.timestamp.desc()).all()
+    return render_template('imagenes.html', images=rows)
 
 if __name__ == '__main__':
     app.run()

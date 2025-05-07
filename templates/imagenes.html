@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Imágenes Subidas</title>
+    <style>
+        table { border-collapse: collapse; width: 100%; margin-top: 20px; }
+        th, td { border: 1px solid #ccc; padding: 8px; text-align: center; }
+        th { background-color: #f2f2f2; }
+        body { font-family: Arial, sans-serif; padding: 20px; }
+    </style>
+</head>
+<body>
+    <h1>📊 Imágenes subidas al sistema</h1>
+    <table>
+        <tr>
+            <th>Nombre de archivo</th>
+            <th>Rojo</th>
+            <th>Verde</th>
+            <th>Azul</th>
+            <th>Usuario</th>
+            <th>Fecha</th>
+        </tr>
+        {% for img in images %}
+        <tr>
+            <td>{{ img.file_name }}</td>
+            <td>{{ img.red }}</td>
+            <td>{{ img.green }}</td>
+            <td>{{ img.blue }}</td>
+            <td>{{ img.user }}</td>
+            <td>{{ img.timestamp }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>
